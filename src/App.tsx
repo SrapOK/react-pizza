@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+
+import Categories from "./components/Categories";
+import Header from "./components/Header";
+import PizzaBlock from "./components/PizzaBlock";
+import Sort from "./components/Sort";
+import PizzaBlockSkeleton from "./components/PizzaBlock/Skeleton";
+
+import "./scss/app.scss";
 
 function App() {
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://63cd36b40f1d5967f02bf10b.mockapi.io/items")
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        setItems(json);
+        setIsLoading(false);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrapper">
+      <Header />
+      <div className="content">
+        <div className="container">
+          <div className="content__top">
+            <Categories />
+            <Sort />
+          </div>
+          <h2 className="content__title">Все пиццы</h2>
+          <div className="content__items">
+            {isLoading
+              ? [...new Array(6)].map((_, index) => (
+                  <PizzaBlockSkeleton key={index} />
+                ))
+              : items.map((obj: any) => <PizzaBlock key={obj.id} {...obj} />)}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
