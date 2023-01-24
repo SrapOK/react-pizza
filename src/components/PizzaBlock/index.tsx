@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-interface IpizzaBlockProps {
+interface IPizzaBlockProps {
   title: string;
   price: number;
   imageUrl: string;
@@ -14,7 +14,7 @@ export default function PizzaBlock({
   imageUrl,
   sizes,
   types,
-}: IpizzaBlockProps) {
+}: IPizzaBlockProps) {
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
   const typeName = ["тонкое", "традиционное"];

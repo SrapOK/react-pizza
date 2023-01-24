@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 
-export default function Categories() {
-  const [activeIndex, setActiveIndex] = useState(0);
+interface ICategoriesProps {
+  categoryId: number;
+  clickOnCategory: (id: number) => void;
+}
+
+export default function Categories({
+  categoryId,
+  clickOnCategory,
+}: ICategoriesProps) {
   const categories = ["Все", "Мясные", "Вегетарианская", "Острые", "Закрытые"];
 
   return (
@@ -11,8 +18,8 @@ export default function Categories() {
           return (
             <li
               key={i}
-              onClick={() => setActiveIndex(i)}
-              className={activeIndex === i ? "active" : ""}
+              onClick={() => clickOnCategory(i)}
+              className={categoryId === i ? "active" : ""}
             >
               {category}
             </li>

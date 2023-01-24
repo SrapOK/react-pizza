@@ -1,0 +1,13 @@
+.root {
+  padding: 90px;
+  max-width: 750px;
+  margin: 0 auto;
+  text-align: center;
+
+  span {
+    font-size: 6rem;
+  }
+  > p {
+    font-size: 18px;
+  }
+}

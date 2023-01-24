@@ -1,0 +1,40 @@
+%icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.4;
+  color: red;
+  position: absolute;
+  top: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: rgba($color: #585858, $alpha: 0.2);
+  }
+  border-radius: 6px;
+}
+
+.root {
+  position: relative;
+  left: -120px;
+  input {
+    padding: 8px 20px;
+    padding-left: 42px;
+    width: 300px;
+    border-radius: 12px;
+    font-size: 16px;
+    border: 1px solid rgba($color: #000000, $alpha: 0.2);
+    transition: all 0.2s ease-in-out;
+    &:focus {
+      border: 1px solid rgba($color: #000000, $alpha: 0.5);
+      width: 350px;
+    }
+  }
+  .loupe {
+    @extend %icon;
+    left: 12px;
+  }
+  .clear {
+    @extend %icon;
+    right: 10px;
+  }
+}

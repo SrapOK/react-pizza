@@ -1,13 +1,26 @@
+import { type } from "@testing-library/user-event/dist/type";
 import React, { useState } from "react";
 
-export default function Sort() {
-  const [open, setOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState(0);
-  const list = ["популярности", "цене", "алфавиту"];
-  const sortName = list[activeItem];
+interface ISortType {
+  name: string;
+  sortProperty: string;
+}
 
-  const clickOnItem = (i: number) => {
-    setActiveItem(i);
+interface ISortProps {
+  sortType: ISortType;
+  clickOnSort: (obj: ISortType) => void;
+}
+
+export default function Sort({ sortType, clickOnSort }: ISortProps) {
+  const [open, setOpen] = useState(false);
+  const list: ISortType[] = [
+    { name: "популярности", sortProperty: "rating" },
+    { name: "цене", sortProperty: "price" },
+    { name: "алфавиту", sortProperty: "title" },
+  ];
+
+  const clickOnItem = (obj: ISortType) => {
+    clickOnSort(obj);
     setOpen(false);
   };
 
@@ -27,18 +40,18 @@ export default function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{sortName}</span>
+        <span onClick={() => setOpen(!open)}>{sortType.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
           <ul>
-            {list.map((item, i) => (
+            {list.map((obj, i) => (
               <li
-                onClick={() => clickOnItem(i)}
+                onClick={() => clickOnItem(obj)}
                 key={i}
-                className={activeItem === i ? "active" : ""}
+                className={sortType.name === obj.name ? "active" : ""}
               >
-                {item}
+                {obj.name}
               </li>
             ))}
           </ul>
