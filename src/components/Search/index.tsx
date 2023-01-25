@@ -1,15 +1,14 @@
 import React from "react";
+import { SearchContext } from "../../App";
+import { useContext } from "react";
 
 import styles from "./Search.module.scss";
 import SearchSvg from "../../assets/img/search.svg";
 import ClearSvg from "../../assets/img/clear.svg";
 
-interface ISearchProps {
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-  searchValue: string;
-}
+export default function Search() {
+  const { searchValue, setSearchValue } = useContext(SearchContext);
 
-export default function index({ setSearchValue, searchValue }: ISearchProps) {
   return (
     <div className={styles.root}>
       <img className={styles.loupe} src={SearchSvg} alt="loupe" />

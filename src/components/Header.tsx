@@ -5,12 +5,7 @@ import Search from "./Search";
 
 import LogoSvg from "../assets/img/pizza-logo.svg";
 
-interface IHeaderProps {
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-  searchValue: string;
-}
-
-export default function Header({ searchValue, setSearchValue }: IHeaderProps) {
+export default function Header() {
   return (
     <div className="header">
       <div className="container">
@@ -23,7 +18,7 @@ export default function Header({ searchValue, setSearchValue }: IHeaderProps) {
             </div>
           </div>
         </Link>
-        <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+        <Search />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>520 ₽</span>

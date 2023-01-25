@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import PizzaBlock from "../components/PizzaBlock";
 import Sort from "../components/Sort";
 import PizzaBlockSkeleton from "../components/PizzaBlock/Skeleton";
 import Categories from "../components/Categories";
 import Pagination from "../components/Pagination";
-
-interface IHomeProps {
-  searchValue: string;
-}
+import { SearchContext } from "../App";
 
 interface IPizzaBlock {
   id: number;
@@ -19,7 +16,7 @@ interface IPizzaBlock {
   types: number[];
 }
 
-export default function Home({ searchValue }: IHomeProps) {
+export default function Home() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryType, setCategoryType] = useState(0);
@@ -29,9 +26,11 @@ export default function Home({ searchValue }: IHomeProps) {
     sortProperty: "rating",
   });
 
+  const { searchValue, setSearchValue } = useContext(SearchContext);
+
   useEffect(() => {
     setIsLoading(true);
-    const category = `${categoryType > 0 ? `category=${categoryType}` : ""}`;
+    const category = `${categoryType > 0 ? `&category=${categoryType}` : ""}`;
     const search = searchValue ? `&search=${searchValue}` : "";
     const sort = `&sortBy=${sortType.sortProperty}&order=desc`;
     const page = `page=${currentPpage}&limit=6`;
