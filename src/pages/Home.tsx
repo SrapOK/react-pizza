@@ -1,11 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 import PizzaBlock from "../components/PizzaBlock";
 import Sort from "../components/Sort";
 import PizzaBlockSkeleton from "../components/PizzaBlock/Skeleton";
 import Categories from "../components/Categories";
 import Pagination from "../components/Pagination";
+
 import { SearchContext } from "../App";
+
+import {
+  selectCategoryType,
+  selectSortType,
+  selectCurrentPage,
+  setCategoryType,
+} from "../redux/slices/filterSlice";
 
 interface IPizzaBlock {
   id: number;
@@ -17,36 +27,37 @@ interface IPizzaBlock {
 }
 
 export default function Home() {
+  const categoryType = useSelector(selectCategoryType);
+  const sortType = useSelector(selectSortType);
+  const currentPage = useSelector(selectCurrentPage);
+  const dispatch = useDispatch();
+
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [categoryType, setCategoryType] = useState(0);
-  const [currentPpage, setCurrentPage] = useState(1);
-  const [sortType, setSortType] = useState({
-    name: "популярности",
-    sortProperty: "rating",
-  });
 
   const { searchValue, setSearchValue } = useContext(SearchContext);
+
+  const clickOnCategory = (id: number) => {
+    dispatch(setCategoryType(id));
+  };
 
   useEffect(() => {
     setIsLoading(true);
     const category = `${categoryType > 0 ? `&category=${categoryType}` : ""}`;
     const search = searchValue ? `&search=${searchValue}` : "";
     const sort = `&sortBy=${sortType.sortProperty}&order=desc`;
-    const page = `page=${currentPpage}&limit=6`;
+    const page = `page=${currentPage}&limit=6`;
 
-    fetch(
-      `https://63cd36b40f1d5967f02bf10b.mockapi.io/items?${page}${category}${search}${sort}`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        setItems(json);
+    axios
+      .get(
+        `https://63cd36b40f1d5967f02bf10b.mockapi.io/items?${page}${category}${search}${sort}`
+      )
+      .then((response) => {
+        setItems(response.data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryType, sortType, searchValue, currentPpage]);
+  }, [categoryType, sortType, searchValue, currentPage]);
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <PizzaBlockSkeleton key={index} />
@@ -61,13 +72,13 @@ export default function Home() {
       <div className="content__top">
         <Categories
           categoryId={categoryType}
-          clickOnCategory={(id: number) => setCategoryType(id)}
+          clickOnCategory={clickOnCategory}
         />
-        <Sort sortType={sortType} clickOnSort={(obj) => setSortType(obj)} />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-      <Pagination changePage={setCurrentPage} />
+      <Pagination />
     </>
   );
 }

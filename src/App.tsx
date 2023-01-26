@@ -1,17 +1,14 @@
 import React, { createContext, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
+
 import HomePage from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Cart from "./pages/Cart";
 
 import "./scss/app.scss";
-
-interface ISearchValue {
-  searchValue?: string;
-  setSearchValue?: React.Dispatch<React.SetStateAction<string>>;
-}
 
 export const SearchContext: React.Context<any> = createContext({});
 

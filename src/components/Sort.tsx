@@ -1,17 +1,12 @@
-import { type } from "@testing-library/user-event/dist/type";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSortType, setSortType } from "../redux/slices/filterSlice";
+import { ISortType } from "../redux/slices/filterSlice";
 import React, { useState } from "react";
 
-interface ISortType {
-  name: string;
-  sortProperty: string;
-}
+export default function Sort() {
+  const dispatch = useDispatch();
+  const sortType = useSelector(selectSortType);
 
-interface ISortProps {
-  sortType: ISortType;
-  clickOnSort: (obj: ISortType) => void;
-}
-
-export default function Sort({ sortType, clickOnSort }: ISortProps) {
   const [open, setOpen] = useState(false);
   const list: ISortType[] = [
     { name: "популярности", sortProperty: "rating" },
@@ -20,7 +15,7 @@ export default function Sort({ sortType, clickOnSort }: ISortProps) {
   ];
 
   const clickOnItem = (obj: ISortType) => {
-    clickOnSort(obj);
+    dispatch(setSortType(obj));
     setOpen(false);
   };
 

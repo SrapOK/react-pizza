@@ -1,20 +1,25 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
+import { useSelector, useDispatch } from "react-redux";
 
 import styles from "./Pagination.module.scss";
 
-interface IPagination {
-  changePage: (pageNumber: number) => void;
-}
+import { setCurrentPage } from "../../redux/slices/filterSlice";
 
-export default function Pagination({ changePage }: IPagination) {
+export default function Pagination() {
+  const dispatch = useDispatch();
+
+  const changePage = (event: { selected: number }) => {
+    dispatch(setCurrentPage(event.selected + 1));
+  };
+
   return (
     <div className={styles.wrapper}>
       <ReactPaginate
         className={styles.root}
         breakLabel="..."
         nextLabel=">"
-        onPageChange={(event) => changePage(event.selected + 1)}
+        onPageChange={changePage}
         pageRangeDisplayed={2}
         pageCount={2}
         previousLabel="<"
