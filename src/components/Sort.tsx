@@ -1,26 +1,41 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectSortType, setSortType } from "../redux/slices/filterSlice";
 import { ISortType } from "../redux/slices/filterSlice";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+
+export const sortList: ISortType[] = [
+  { name: "популярности", sortProperty: "rating" },
+  { name: "цене", sortProperty: "price" },
+  { name: "алфавиту", sortProperty: "title" },
+];
 
 export default function Sort() {
   const dispatch = useDispatch();
   const sortType = useSelector(selectSortType);
+  const sortRef: any = useRef();
 
   const [open, setOpen] = useState(false);
-  const list: ISortType[] = [
-    { name: "популярности", sortProperty: "rating" },
-    { name: "цене", sortProperty: "price" },
-    { name: "алфавиту", sortProperty: "title" },
-  ];
 
   const clickOnItem = (obj: ISortType) => {
     dispatch(setSortType(obj));
     setOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: Event) => {
+      const path = event.composedPath().includes(sortRef.current);
+      if (!path) setOpen(false);
+    };
+
+    document.body.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
@@ -40,7 +55,7 @@ export default function Sort() {
       {open && (
         <div className="sort__popup">
           <ul>
-            {list.map((obj, i) => (
+            {sortList.map((obj, i) => (
               <li
                 onClick={() => clickOnItem(obj)}
                 key={i}
